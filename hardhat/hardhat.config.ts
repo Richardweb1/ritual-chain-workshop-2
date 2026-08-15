@@ -1,5 +1,22 @@
 import hardhatToolboxViemPlugin from "@nomicfoundation/hardhat-toolbox-viem";
-import { configVariable, defineConfig } from "hardhat/config";
+import { defineConfig } from "hardhat/config";
+import { existsSync, readFileSync } from "node:fs";
+
+const envPath = new URL(".env", import.meta.url);
+if (existsSync(envPath)) {
+  for (const line of readFileSync(envPath, "utf8").split(/\r?\n/)) {
+    const match = line.match(/^\s*([A-Za-z_][A-Za-z0-9_]*)=(.*)\s*$/);
+    if (match === null || process.env[match[1]] !== undefined) {
+      continue;
+    }
+    process.env[match[1]] = match[2].replace(/^['"]|['"]$/g, "");
+  }
+}
+
+const ritualPrivateKey = process.env.RITUAL_PRIVATE_KEY;
+if (ritualPrivateKey === undefined || ritualPrivateKey === "0x") {
+  throw new Error("Set RITUAL_PRIVATE_KEY in hardhat/.env before using the ritual network.");
+}
 
 export default defineConfig({
   plugins: [hardhatToolboxViemPlugin],
@@ -36,8 +53,8 @@ export default defineConfig({
       type: "http",
       chainType: "l1",
       chainId: 1979,
-      url: "https://rpc.ritualfoundation.org",
-      accounts: [configVariable("DEPLOYER_PRIVATE_KEY")],
+      url: process.env.RITUAL_RPC_URL ?? "https://rpc.ritualfoundation.org",
+      accounts: [ritualPrivateKey],
     },
   },
 });
