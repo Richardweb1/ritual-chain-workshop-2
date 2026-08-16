@@ -19,34 +19,34 @@
           </span>
           <span>
             <strong>Signal Prediction</strong>
-            <small>Autonomous markets</small>
+            <small>Private bounty judge</small>
           </span>
         </a>
 
         <nav class="nav-stack">
-          <a class="nav-item active" href="#markets">
+          <a class="nav-item active" href="#overview">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V5m0 14h16M8 15l3-4 3 2 5-7" /></svg>
-            Markets
+            Overview
           </a>
-          <a class="nav-item" href="#scheduler">
+          <a class="nav-item" href="#lifecycle">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6v6l4 2M4 12a8 8 0 1 0 16 0 8 8 0 0 0-16 0Z" /></svg>
-            Scheduler
+            Lifecycle
           </a>
-          <a class="nav-item" href="#oracle">
+          <a class="nav-item" href="#tests">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l4 4L19 6" /></svg>
+            Tests
+          </a>
+          <a class="nav-item" href="#architecture">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h16M4 16h16M8 4v16M16 4v16" /></svg>
-            Oracle Tape
-          </a>
-          <a class="nav-item" href="#create">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>
-            Create
+            Architecture
           </a>
         </nav>
 
-        <section class="network-panel" aria-label="Network status">
+        <section class="network-panel" aria-label="Submission status">
           <span class="status-dot"></span>
           <div>
-            <strong>Ritual Chain</strong>
-            <small>Chain ID 1979</small>
+            <strong>Homework Ready</strong>
+            <small>Commit-reveal complete</small>
           </div>
         </section>
       </aside>
@@ -54,113 +54,125 @@
       <main id="top" class="workspace">
         <header class="topbar">
           <div>
-            <p class="eyebrow">Autonomous prediction market control room</p>
-            <h1>Self-resolving markets with visible oracle discipline.</h1>
+            <p class="eyebrow">Privacy-preserving AI bounty judge</p>
+            <h1>Hide submissions until the reveal phase, then judge the valid batch.</h1>
           </div>
-          <button id="connectWallet" class="button secondary" type="button">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 7h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7Zm13 5h3" /></svg>
-            Connect wallet
-          </button>
+          <a class="button secondary" href="https://github.com/Richardweb1/ritual-chain-workshop-2" target="_blank" rel="noreferrer">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" /></svg>
+            GitHub fork
+          </a>
         </header>
 
-        <section class="hero-grid" aria-label="Market summary">
+        <section id="overview" class="hero-grid" aria-label="Homework overview">
           <div class="summary-panel">
             <div class="summary-copy">
-              <span class="pill">HTTP precompile + jq + Scheduler</span>
-              <h2>Markets resolve themselves. The interface shows why.</h2>
+              <span class="pill">Required track implemented</span>
+              <h2>Commitments are public. Answers stay hidden until reveal.</h2>
               <p>
-                Track stakes, scheduled resolution blocks, oracle feeds, and retry health before
-                touching a transaction.
+                The Solidity contract stores only commitment hashes before the deadline and accepts
+                plaintext answers only when the answer, salt, sender, and bounty id match.
               </p>
             </div>
             <div class="metric-row">
-              <div><strong id="totalVolume">169.9</strong><span>RITUAL staked</span></div>
-              <div><strong>4</strong><span>monitored markets</span></div>
-              <div><strong>3x</strong><span>scheduler attempts</span></div>
+              <div><strong>4</strong><span>required functions</span></div>
+              <div><strong>4</strong><span>Hardhat tests passing</span></div>
+              <div><strong>1x</strong><span>batch AI judging call</span></div>
             </div>
           </div>
 
-          <div class="resolution-panel" id="scheduler">
+          <div class="resolution-panel">
             <div class="section-heading compact">
-              <span>Next resolution</span>
-              <strong>#12 ETH/USD threshold</strong>
+              <span>Contract location</span>
+              <strong>CommitRevealBountyJudge.sol</strong>
             </div>
-            <ol class="timeline">
-              <li class="done"><span></span><p>Betting window closed</p></li>
-              <li class="active"><span></span><p>Scheduler wake at block 9,842,104</p></li>
-              <li><span></span><p>TEE HTTP fetch + jq extraction</p></li>
-              <li><span></span><p>Auto-settle and unlock claims</p></li>
-            </ol>
+            <div class="code-card">
+              <code>hardhat/contracts/CommitRevealBountyJudge.sol</code>
+              <code>hardhat/test/CommitRevealBountyJudge.ts</code>
+              <code>BOUNTY_JUDGE_ARCHITECTURE.md</code>
+            </div>
           </div>
         </section>
 
-        <section id="markets" class="content-grid">
+        <section class="content-grid">
           <div class="section-heading">
             <div>
-              <span>Live markets</span>
-              <h2>Decision surface</h2>
-            </div>
-            <div class="segmented" role="tablist" aria-label="Market filters">
-              <button class="active" type="button" data-filter="all">All</button>
-              <button type="button" data-filter="crypto">Crypto</button>
-              <button type="button" data-filter="ritual">Ritual</button>
-              <button type="button" data-filter="macro">Macro</button>
+              <span>Required functions</span>
+              <h2>Solidity surface</h2>
             </div>
           </div>
 
-          <div id="testPanel" class="test-panel" aria-live="polite">
-            <div>
-              <span class="eyebrow">Test console</span>
-              <strong>No local position yet</strong>
-            </div>
-            <p>Use YES, NO, Inspect, or Stage market to see the prototype respond.</p>
-            <button id="clearDrafts" class="button secondary" type="button">Clear drafts</button>
-          </div>
-
-          <div id="marketGrid" class="market-grid" aria-live="polite"></div>
+          <div id="functionGrid" class="market-grid"></div>
         </section>
 
-        <section class="lower-grid">
-          <div id="oracle" class="surface">
+        <section id="lifecycle" class="lower-grid">
+          <div class="surface">
             <div class="section-heading compact">
-              <span>Oracle tape</span>
-              <strong>Latest external reads</strong>
+              <span>Commit-reveal lifecycle</span>
+              <strong>Submission privacy flow</strong>
             </div>
-            <div id="oracleTape" class="oracle-tape"></div>
+            <ol class="timeline">
+              <li class="done"><span></span><p>Create bounty with reward, rubric, and deadline.</p></li>
+              <li class="done"><span></span><p>Participants submit only a commitment hash.</p></li>
+              <li class="active"><span></span><p>After deadline, answers reveal with salt.</p></li>
+              <li><span></span><p>Only valid revealed answers enter AI judging.</p></li>
+              <li><span></span><p>Owner finalizes winner and reward payout.</p></li>
+            </ol>
           </div>
 
           <div class="surface">
             <div class="section-heading compact">
-              <span>Agent log</span>
-              <strong>Resolution monitor</strong>
+              <span>Commitment formula</span>
+              <strong>Bound to sender and bounty</strong>
             </div>
-            <div id="agentLog" class="agent-log"></div>
+            <div class="formula-box">
+              <code>keccak256(abi.encode(answer, salt, msg.sender, bountyId))</code>
+            </div>
+            <p>
+              A copied answer cannot be revealed by a different wallet because `msg.sender` is part
+              of the commitment.
+            </p>
           </div>
         </section>
 
-        <section id="create" class="create-band">
-          <div>
-            <p class="eyebrow">Create market studio</p>
-            <h2>Draft a binary market with immutable resolution rules.</h2>
+        <section id="tests" class="content-grid">
+          <div class="section-heading">
+            <div>
+              <span>Test plan</span>
+              <h2>Reveal cases covered</h2>
+            </div>
           </div>
-          <form id="marketForm" class="create-form">
-            <label>
-              Question
-              <input name="question" required value="Will BTC/USD stay above $70,000 at resolution?" />
-            </label>
-            <label>
-              Oracle URL
-              <input name="oracle" required value="https://api.example.com/price/btc" />
-            </label>
-            <label>
-              Target
-              <input name="target" required type="number" value="70000" />
-            </label>
-            <button class="button primary" type="submit">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
-              Stage market
-            </button>
-          </form>
+          <div id="testPanel" class="test-panel" aria-live="polite">
+            <div>
+              <span class="eyebrow">Hardhat verification</span>
+              <strong>4 passing tests</strong>
+            </div>
+            <p>Click any test case to inspect what it proves.</p>
+            <button id="copyCommand" class="button secondary" type="button">Copy test command</button>
+          </div>
+          <div id="testGrid" class="market-grid"></div>
+        </section>
+
+        <section id="architecture" class="lower-grid">
+          <div class="surface">
+            <div class="section-heading compact">
+              <span>Advanced track note</span>
+              <strong>Ritual-native hidden submissions</strong>
+            </div>
+            <div id="architectureList" class="oracle-tape"></div>
+          </div>
+
+          <div class="surface">
+            <div class="section-heading compact">
+              <span>Reflection</span>
+              <strong>Public, hidden, AI, human</strong>
+            </div>
+            <p>
+              Bounty rules, rewards, deadlines, and final payout should be public so participants
+              can audit the process. Answers and salts should stay hidden during the competitive
+              phase to prevent copying. AI should batch-judge valid revealed answers against the
+              rubric. A human should still confirm subjective or high-context final decisions.
+            </p>
+          </div>
         </section>
       </main>
     </div>
