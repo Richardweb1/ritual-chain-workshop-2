@@ -91,6 +91,10 @@ svg {
   text-decoration: none;
 }
 
+.compact-brand {
+  width: 52px;
+}
+
 .brand-mark {
   display: grid;
   place-items: center;
