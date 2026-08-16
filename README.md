@@ -11,6 +11,44 @@ Winners then pull their proportional share of the pool.
 
 ---
 
+## Privacy-Preserving AI Bounty Judge Homework
+
+This fork also includes the assignment deliverables for the commit-reveal bounty judge.
+
+Updated Solidity contract:
+
+```text
+hardhat/contracts/CommitRevealBountyJudge.sol
+```
+
+Required functions implemented:
+
+- `submitCommitment(uint256 bountyId, bytes32 commitment)`
+- `revealAnswer(uint256 bountyId, string calldata answer, bytes32 salt)`
+- `judgeAll(uint256 bountyId, bytes calldata llmInput)`
+- `finalizeWinner(uint256 bountyId, uint256 winnerIndex)`
+
+Supporting files:
+
+- `hardhat/test/CommitRevealBountyJudge.ts` contains the reveal-case tests.
+- `BOUNTY_JUDGE_ARCHITECTURE.md` explains the lifecycle, test plan, Ritual-native hidden-submission
+  design, and reflection question.
+
+Commitment formula:
+
+```solidity
+keccak256(abi.encode(answer, salt, msg.sender, bountyId))
+```
+
+Run the homework tests:
+
+```bash
+cd hardhat
+pnpm exec hardhat test
+```
+
+---
+
 ## Architecture
 
 ```
