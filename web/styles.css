@@ -427,6 +427,27 @@ p {
   gap: 16px;
 }
 
+.test-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(240px, 0.8fr) auto;
+  gap: 14px;
+  align-items: center;
+  margin-bottom: 16px;
+  padding: 14px;
+  border: 1px solid rgba(16, 107, 91, 0.22);
+  border-radius: var(--radius);
+  background: #f8fbf6;
+}
+
+.test-panel strong {
+  display: block;
+  margin-top: 3px;
+}
+
+.test-panel p {
+  margin: 0;
+}
+
 .market-card {
   min-height: 292px;
   display: grid;
@@ -493,6 +514,28 @@ p {
   gap: 10px;
   border-top: 1px solid var(--line);
   padding-top: 14px;
+}
+
+.market-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.choice-button {
+  min-width: 88px;
+}
+
+.choice-button.yes {
+  background: #e8f6ef;
+  border-color: rgba(22, 131, 93, 0.28);
+  color: #0b6c4b;
+}
+
+.choice-button.no {
+  background: #fff1ed;
+  border-color: rgba(180, 107, 42, 0.28);
+  color: #8a431c;
 }
 
 .market-footer small {
@@ -641,9 +684,14 @@ input {
 
   .topbar,
   .section-heading,
-  .market-footer {
+  .market-footer,
+  .test-panel {
     align-items: stretch;
     flex-direction: column;
+  }
+
+  .test-panel {
+    display: flex;
   }
 
   .nav-stack,

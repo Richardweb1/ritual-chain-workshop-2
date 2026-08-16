@@ -68,6 +68,10 @@ const oracleTape = document.querySelector("#oracleTape");
 const agentLog = document.querySelector("#agentLog");
 const toast = document.querySelector("#toast");
 const totalVolume = document.querySelector("#totalVolume");
+const testPanel = document.querySelector("#testPanel");
+let activeFilter = "all";
+let localDraftId = null;
+let localPositions = [];
 
 function yesOdds(market) {
   return (100 / market.yes).toFixed(2);
@@ -78,6 +82,7 @@ function noOdds(market) {
 }
 
 function renderMarkets(filter = "all") {
+  activeFilter = filter;
   const visible = filter === "all" ? markets : markets.filter((market) => market.category === filter);
   marketGrid.innerHTML = visible
     .map(
@@ -105,10 +110,18 @@ function renderMarkets(filter = "all") {
           </div>
           <div class="market-footer">
             <small>${market.volume.toFixed(1)} RITUAL · ${market.feed}</small>
-            <button class="button secondary" type="button" data-action="inspect" data-id="${market.id}">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h16M12 4v16" /></svg>
-              Inspect
-            </button>
+            <div class="market-actions">
+              <button class="button secondary choice-button yes" type="button" data-action="position" data-side="YES" data-id="${market.id}">
+                YES
+              </button>
+              <button class="button secondary choice-button no" type="button" data-action="position" data-side="NO" data-id="${market.id}">
+                NO
+              </button>
+              <button class="button secondary" type="button" data-action="inspect" data-id="${market.id}">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h16M12 4v16" /></svg>
+                Inspect
+              </button>
+            </div>
           </div>
         </article>
       `,
@@ -144,6 +157,11 @@ function renderLog() {
     .join("");
 }
 
+function updateTestPanel(title, detail) {
+  testPanel.querySelector("strong").textContent = title;
+  testPanel.querySelector("p").textContent = detail;
+}
+
 function showToast(message) {
   toast.textContent = message;
   toast.classList.add("show");
@@ -160,11 +178,38 @@ document.querySelectorAll("[data-filter]").forEach((button) => {
 });
 
 marketGrid.addEventListener("click", (event) => {
-  const button = event.target.closest("[data-action='inspect']");
+  const button = event.target.closest("[data-action]");
   if (!button) return;
   const market = markets.find((item) => item.id === Number(button.dataset.id));
   if (!market) return;
-  showToast(`#${market.id}: ${market.rule}`);
+  if (button.dataset.action === "inspect") {
+    updateTestPanel(
+      `#${market.id} ${market.label}: ${market.status}`,
+      `${market.rule}. Feed: ${market.feed}. Volume: ${market.volume.toFixed(1)} RITUAL.`,
+    );
+    showToast(`Inspecting #${market.id}. Details moved to the test console.`);
+    return;
+  }
+
+  if (button.dataset.action === "position") {
+    const side = button.dataset.side;
+    localPositions.unshift({ marketId: market.id, side, amount: 0.25 });
+    if (side === "YES") {
+      market.yes = Math.min(95, market.yes + 1);
+      market.no = 100 - market.yes;
+    } else {
+      market.no = Math.min(95, market.no + 1);
+      market.yes = 100 - market.no;
+    }
+    market.volume += 0.25;
+    totalVolume.textContent = markets.reduce((sum, item) => sum + item.volume, 0).toFixed(1);
+    renderMarkets(activeFilter);
+    updateTestPanel(
+      `Local ${side} position staged on #${market.id}`,
+      `0.25 RITUAL simulated. This is UI-only until wallet transactions are wired to bet().`,
+    );
+    showToast(`${side} test position added locally.`);
+  }
 });
 
 document.querySelector("#connectWallet").addEventListener("click", (event) => {
@@ -181,8 +226,8 @@ document.querySelector("#marketForm").addEventListener("submit", (event) => {
   const question = String(form.get("question")).trim();
   const target = Number(form.get("target"));
   if (!question || Number.isNaN(target)) return;
-  markets.unshift({
-    id: Math.max(...markets.map((market) => market.id)) + 1,
+  const draft = {
+    id: localDraftId ?? Math.max(...markets.map((market) => market.id)) + 1,
     category: "crypto",
     label: "Draft",
     question,
@@ -192,11 +237,34 @@ document.querySelector("#marketForm").addEventListener("submit", (event) => {
     volume: 0,
     feed: "Staged locally",
     status: "Draft",
-  });
+  };
+  if (localDraftId === null) {
+    localDraftId = draft.id;
+    markets.unshift(draft);
+  } else {
+    const index = markets.findIndex((market) => market.id === localDraftId);
+    markets[index] = draft;
+  }
   totalVolume.textContent = markets.reduce((sum, market) => sum + market.volume, 0).toFixed(1);
   renderMarkets("all");
   document.querySelector("[data-filter='all']").click();
-  showToast("Market staged locally. Wire this to createMarket() after deployment.");
+  updateTestPanel(
+    `Draft market #${draft.id} staged`,
+    "The draft is updated in place, so repeated tests will not spam duplicate cards.",
+  );
+  showToast("Draft staged locally. Re-submit edits the same draft card.");
+});
+
+document.querySelector("#clearDrafts").addEventListener("click", () => {
+  for (let i = markets.length - 1; i >= 0; i--) {
+    if (markets[i].status === "Draft") {
+      markets.splice(i, 1);
+    }
+  }
+  localDraftId = null;
+  renderMarkets(activeFilter);
+  updateTestPanel("Drafts cleared", "The market list is back to the seeded workshop data.");
+  showToast("Local draft cards cleared.");
 });
 
 renderMarkets();
