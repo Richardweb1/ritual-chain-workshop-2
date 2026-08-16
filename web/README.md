@@ -1,4 +1,4 @@
-# Frontend Prototype
+# Signal Prediction
 
 Static workshop frontend for `RitualPredict.sol`.
 
