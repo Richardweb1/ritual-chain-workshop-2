@@ -1,4 +1,4 @@
-# Ritual Predict Observatory
+# Ritual Market Lab
 
 Static workshop frontend for `RitualPredict.sol`.
 

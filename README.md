@@ -103,7 +103,7 @@ This fork includes a custom static frontend prototype:
 web/index.html
 ```
 
-It is designed as a Ritual Predict Observatory, not a copy of the TEEGENT demo. The UI highlights
+It is designed as Ritual Market Lab, not a copy of the TEEGENT demo. The UI highlights
 market odds, oracle-read health, scheduler state, agent logs, and a local create-market draft form.
 Open the file directly in a browser to view it.
 
